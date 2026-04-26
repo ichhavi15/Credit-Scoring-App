@@ -209,7 +209,6 @@ else:
     st.error("❌ 'loan_status' column not found")
 
 # =========================
-
 # =========================
 # FRAUD FUNCTION
 # =========================
