@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import joblib
 import cv2
 import numpy as np
-import pyttsx3
 engine = pyttsx3.init()
 import pytesseract
 from PIL import Image
