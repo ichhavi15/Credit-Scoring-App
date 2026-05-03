@@ -445,7 +445,7 @@ if st.button("🚀 Predict Loan Status"):
     import base64
     import streamlit.components.v1 as components
     with open(audio_file, "rb") as f:
-    audio_bytes = f.read()
+        audio_bytes = f.read()
     audio_base64 = base64.b64encode(audio_bytes).decode()
     components.html(f"""
     <!DOCTYPE html>
