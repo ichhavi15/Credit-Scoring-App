@@ -439,23 +439,18 @@ if st.button("🚀 Predict Loan Status"):
     else:
         st.error("❌ Loan Rejected")
         text = (f"Sorry, your loan is rejected due to high risk factors.")
+    st.success("🔊 Voice response generated")
     audio_file = speak(text)
     st.audio(audio_file, format="audio/mp3")
     import base64
-    audio_file = speak(text)
+    import streamlit.components.v1 as components
     audio_bytes = open(audio_file, "rb").read()
     audio_base64 = base64.b64encode(audio_bytes).decode()
-    st.markdown(
-        f"""
-        <audio id="audio" autoplay style="display:none;">
-        <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
-        </audio>
-        <script>
-        var audio = document.getElementById("audio");
-        audio.playbackRate = 1.25;  // 🔥 perfect speed
-        </script>
-        """,
-        unsafe_allow_html=True)
+    components.html(f"""
+    <audio autoplay style="display:none;">
+    <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
+    </audio>
+    """, height=0)
 
 with tab1:
     if 'result' in st.session_state:
