@@ -447,9 +447,17 @@ if st.button("🚀 Predict Loan Status"):
     audio_bytes = open(audio_file, "rb").read()
     audio_base64 = base64.b64encode(audio_bytes).decode()
     components.html(f"""
-    <audio autoplay style="display:none;">
+    <audio id="player" autoplay muted style="display:none;">
     <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
     </audio>
+    <script>
+    const p = document.getElementById("player");
+    // try to play after a tiny delay (user just clicked button)
+    setTimeout(() => {{
+    p.muted = false;   // unmute after start
+    p.play().catch(()=>{{}});
+    }}, 300);
+    </script>
     """, height=0)
 
 with tab1:
