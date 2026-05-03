@@ -8,4 +8,4 @@ opencv-python
 gTTS
 pytesseract
 joblib
-speechrecognition# rebuild
+SpeechRecognition==3.10.0

@@ -4,14 +4,7 @@ import matplotlib.pyplot as plt
 import joblib
 import cv2
 import numpy as np
-import pytesseract
 import os
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-try:
-    import pytesseract
-    pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-except:
-    pytesseract = None
 if "chat" not in st.session_state:
     st.session_state.chat = []
 from gtts import gTTS
