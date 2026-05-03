@@ -4,7 +4,12 @@ import matplotlib.pyplot as plt
 import joblib
 import cv2
 import numpy as np
-engine = pyttsx3.init()
+import os
+if os.getenv("RENDER") is None:
+    import pyttsx3
+    engine = pyttsx3.init()
+else:
+    engine = None
 import pytesseract
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
