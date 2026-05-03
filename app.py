@@ -4,13 +4,30 @@ import matplotlib.pyplot as plt
 import joblib
 import cv2
 import numpy as np
+import pytesseract
 import os
-if os.getenv("RENDER") != "true":
-    import pyttsx3
-    engine = pyttsx3.init()
-else:
-    engine = None
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+try:
+    import pytesseract
+    pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+except:
+    pytesseract = None
+if "chat" not in st.session_state:
+    st.session_state.chat = []
 from gtts import gTTS
+import tempfile
+
+def speak(text):
+    tts = gTTS(
+        text=text,
+        lang='en',
+        tld='co.in',   # 🔥 Indian English accent (better sound)
+        slow=False     # fast speaking
+    )
+    
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+    tts.save(temp_file.name)
+    return temp_file.name
 import tempfile
 def speak(text):
     tts = gTTS(text)
@@ -18,7 +35,6 @@ def speak(text):
     tts.save(temp_file.name)
     return temp_file.name
 
-import pytesseract
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
 model = LogisticRegression()
@@ -415,33 +431,56 @@ if st.button("🚀 Predict Loan Status"):
     "CIBIL": cibil,
     "Result": result_label
     })
-   
+    user_msg = f"I want a loan of ₹{loan_amount} with income ₹{income} and CIBIL {cibil}"
+    if final_result == 1:
+        bot_msg = f"✅ Loan approved! Your profile looks strong 💯"
+    else:
+        bot_msg = "❌ Sorry, your loan is rejected."
+    st.session_state.chat.append(("user", user_msg))
+    st.session_state.chat.append(("bot", bot_msg))
     if "result" in st.session_state:
-        if st.session_state.result == 1:
-            st.success("✅ Loan Approved")
-            audio_file = speak("Loan Approved")
-            st.audio(audio_file)
-        else:
-            st.error("❌ Loan Rejected")
-            audio_file = speak("Loan Rejected")
-            st.audio(audio_file)
-        
         name = "User"
-        if st.session_state.result == 1:
-            audio_file = speak(f"Hello {name}, your loan is approved. You are a low risk customer.")
-        else:
-            audio_file = speak(f"Hello {name}, your loan is rejected. You are currently a high risk customer. Please improve your profile.")
-        st.audio(audio_file)  
-    
-    with st.spinner("🔄 Processing Loan Application..."):
-        st.markdown("---")
-        st.subheader("📊 Prediction Result")
-        st.success("✔ Prediction completed successfully")
+    if st.session_state.result == 1:
+        st.success("✅ Loan Approved")
+        text = (f"Congratulations! Your loan has been approved.")
+    else:
+        st.error("❌ Loan Rejected")
+        text = (f"Sorry, your loan is rejected due to high risk factors.")
+    audio_file = speak(text)
+    import base64
+    audio_file = speak(text)
+    audio_bytes = open(audio_file, "rb").read()
+    audio_base64 = base64.b64encode(audio_bytes).decode()
+    st.markdown(
+        f"""
+        <audio id="audio" autoplay style="display:none;">
+        <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
+        </audio>
+        <script>
+        var audio = document.getElementById("audio");
+        audio.playbackRate = 1.25;  // 🔥 perfect speed
+        </script>
+        """,
+        unsafe_allow_html=True)
 
 with tab1:
     if 'result' in st.session_state:
         st.subheader("📊 Prediction Result")
         st.success("✔ Prediction completed successfully")
+        st.subheader("💬 AI Assistant")
+        for role, msg in st.session_state.chat:
+            if role == "user":
+                st.markdown(f"""
+                <div style='text-align:right; background:#DCF8C6; padding:10px; border-radius:10px; margin:5px'>
+                🧑 {msg}
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div style='text-align:left; background:#F1F0F0; padding:10px; border-radius:10px; margin:5px'>
+                🤖 {msg}
+                </div>
+                """, unsafe_allow_html=True)
     
     else:
         st.info("Click Predict to see result")

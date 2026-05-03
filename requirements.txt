@@ -1,8 +1,11 @@
 streamlit
 pandas
+numpy
+matplotlib
 scikit-learn
 pillow
-matplotlib
-opencv-python-headless
-# rebuild 
+opencv-python
 gTTS
+pytesseract
+joblib
+speechrecognition
