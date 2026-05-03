@@ -451,24 +451,34 @@ if st.button("🚀 Predict Loan Status"):
     <!DOCTYPE html>
     <html>
     <body>
-    <audio id="audio" autoplay muted>
+    <audio id="audio" autoplay muted playsinline>
     <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
     </audio>
     <script>
     var audio = document.getElementById("audio");
-
-    // try to force autoplay after user interaction
-    document.body.addEventListener('click', function() {{
+    function forcePlay() {{
         audio.muted = false;
-        audio.play().catch(()=>{{}});
-    }});
+        audio.play().then(()=>{{
+            console.log("Autoplay success");
+        }}).catch(()=>{{
+            console.log("Blocked, waiting click...");
+        }});
+    }}
 
-    // auto trigger once
-    setTimeout(() => {{
-        audio.muted = false;
-        audio.play().catch(()=>{{}});
-    }}, 500);
+    // try immediately
+    setTimeout(forcePlay, 200);
+
+    // try multiple times (hack)
+    setTimeout(forcePlay, 1000);
+    setTimeout(forcePlay, 2000);
+
+    // user interaction fallback
+    document.addEventListener("click", forcePlay);
+    document.addEventListener("scroll", forcePlay);
+    document.addEventListener("mousemove", forcePlay);
+
 </script>
+
 </body>
 </html>
 """, height=0)
