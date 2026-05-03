@@ -4,3 +4,4 @@ scikit-learn
 pillow
 matplotlib
 opencv-python-headless
+# rebuild trigger
