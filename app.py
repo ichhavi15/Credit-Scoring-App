@@ -444,21 +444,34 @@ if st.button("🚀 Predict Loan Status"):
     st.audio(audio_file, format="audio/mp3")
     import base64
     import streamlit.components.v1 as components
-    audio_bytes = open(audio_file, "rb").read()
+    with open(audio_file, "rb") as f:
+    audio_bytes = f.read()
     audio_base64 = base64.b64encode(audio_bytes).decode()
     components.html(f"""
-    <audio id="player" autoplay muted style="display:none;">
+    <!DOCTYPE html>
+    <html>
+    <body>
+    <audio id="audio" autoplay muted>
     <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
     </audio>
     <script>
-    const p = document.getElementById("player");
-    // try to play after a tiny delay (user just clicked button)
+    var audio = document.getElementById("audio");
+
+    // try to force autoplay after user interaction
+    document.body.addEventListener('click', function() {{
+        audio.muted = false;
+        audio.play().catch(()=>{{}});
+    }});
+
+    // auto trigger once
     setTimeout(() => {{
-    p.muted = false;   // unmute after start
-    p.play().catch(()=>{{}});
-    }}, 300);
-    </script>
-    """, height=0)
+        audio.muted = false;
+        audio.play().catch(()=>{{}});
+    }}, 500);
+</script>
+</body>
+</html>
+""", height=0)
 
 with tab1:
     if 'result' in st.session_state:

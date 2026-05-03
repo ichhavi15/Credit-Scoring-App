@@ -9,3 +9,4 @@ gTTS
 pytesseract
 joblib
 SpeechRecognition
+# rebuild trigger
