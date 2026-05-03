@@ -440,6 +440,7 @@ if st.button("🚀 Predict Loan Status"):
         st.error("❌ Loan Rejected")
         text = (f"Sorry, your loan is rejected due to high risk factors.")
     audio_file = speak(text)
+    st.audio(audio_file, format="audio/mp3")
     import base64
     audio_file = speak(text)
     audio_bytes = open(audio_file, "rb").read()
