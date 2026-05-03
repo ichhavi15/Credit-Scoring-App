@@ -5,11 +5,19 @@ import joblib
 import cv2
 import numpy as np
 import os
-if os.getenv("RENDER") is None:
+if os.getenv("RENDER") != "true":
     import pyttsx3
     engine = pyttsx3.init()
 else:
     engine = None
+from gtts import gTTS
+import tempfile
+def speak(text):
+    tts = gTTS(text)
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+    tts.save(temp_file.name)
+    return temp_file.name
+
 import pytesseract
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
@@ -411,17 +419,19 @@ if st.button("🚀 Predict Loan Status"):
     if "result" in st.session_state:
         if st.session_state.result == 1:
             st.success("✅ Loan Approved")
-            engine.say("✅ Loan Approved")
+            audio_file = speak("Loan Approved")
+            st.audio(audio_file)
         else:
             st.error("❌ Loan Rejected")
-            engine.say("❌ Loan Rejected")
+            audio_file = speak("Loan Rejected")
+            st.audio(audio_file)
         
         name = "User"
         if st.session_state.result == 1:
-            engine.say(f"Hello {name}, your loan is approved. You are a low risk customer.")
+            audio_file = speak(f"Hello {name}, your loan is approved. You are a low risk customer.")
         else:
-            engine.say(f"Hello {name}, your loan is rejected. You are currently a high risk customer. Please improve your profile.")
-        engine.runAndWait()   
+            audio_file = speak(f"Hello {name}, your loan is rejected. You are currently a high risk customer. Please improve your profile.")
+        st.audio(audio_file)  
     
     with st.spinner("🔄 Processing Loan Application..."):
         st.markdown("---")
