@@ -3,6 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import joblib
 import cv2
+import pytesseract
+from PIL import Image
+pytesseract.pytesseract.tesseract_cmd="/usr/bin/tesseract"
 import numpy as np
 import os
 if "chat" not in st.session_state:
