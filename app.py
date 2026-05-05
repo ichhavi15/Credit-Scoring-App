@@ -5,7 +5,7 @@ import joblib
 import cv2
 import pytesseract
 from PIL import Image
-pytesseract.pytesseract.tesseract_cmd="/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 import numpy as np
 import os
 if "chat" not in st.session_state:
@@ -274,7 +274,6 @@ if uploaded_file is not None:
     else:
         st.warning("📄 Please upload better supporting documents")
         # 🔥 OCR
-        pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
         image = Image.open(uploaded_file)
         text = pytesseract.image_to_string(image)
         st.subheader("📄 Extracted Text")
