@@ -3,9 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import joblib
 import cv2
-import pytesseract
-from PIL import Image
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 import numpy as np
 import os
 if "chat" not in st.session_state:
@@ -262,65 +259,6 @@ if "cibil" not in st.session_state:
     st.session_state.cibil = 0
 
 st.subheader("📥 Enter Loan Details")
-
-st.subheader("📄 Upload Documents")
-
-uploaded_file = st.file_uploader("Upload your document/image", type=["jpg", "png", "jpeg"])
-if uploaded_file is not None:
-    st.image(uploaded_file)
-    
-    if st.session_state.result == 1:
-        st.success("📄 Documents look valid for approval")
-    else:
-        st.warning("📄 Please upload better supporting documents")
-        # 🔥 OCR
-        image = Image.open(uploaded_file)
-        text = pytesseract.image_to_string(image)
-        st.subheader("📄 Extracted Text")
-        st.write(text)
-
-        import re
-        numbers = re.findall(r'\d+', text)
-        if numbers:
-            detected_income = max(map(int, numbers))
-            st.success(f"💰 Detected Income: ₹{detected_income}")
-
-    # auto fill
-            st.session_state.income = detected_income
-    st.subheader("🕵️ Document Verification")
-    if "salary" in text.lower() or "income" in text.lower():
-        st.success("✅ Looks like a valid financial document")
-    else:
-        st.error("🚨 Suspicious document - No salary info found")
-
-        import cv2
-import numpy as np
-from PIL import Image
-
-def detect_face(uploaded_file):
-    image = Image.open(uploaded_file)
-    img_array = np.array(image)
-
-    gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
-
-    face_cascade = cv2.CascadeClassifier(
-        cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-    )
-
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-
-    return len(faces)
-    import re
-
-def verify_aadhaar(text):
-    aadhaar_pattern = r'\b\d{4}\s?\d{4}\s?\d{4}\b'
-    match = re.search(aadhaar_pattern, text)
-
-    if match:
-        return match.group()
-    else:
-        return None
-
 
 col1, col2 = st.columns(2)
 
