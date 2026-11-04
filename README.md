@@ -50,4 +50,4 @@ Credit-Scoring-App/
 cd Credit-Scoring-App
 pip install -r requirements.txt
 streamlit run app.py
-'''
+```bash
