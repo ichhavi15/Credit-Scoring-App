@@ -38,3 +38,16 @@ Credit-Scoring-App/
 ├── requirements.txt
 ├── render.yaml
 └── README.md
+
+---
+
+## 🚀 How to Run Locally
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/ichhavi15/Credit-Scoring-App.git
+
+cd Credit-Scoring-App
+pip install -r requirements.txt
+streamlit run app.py
+'''
